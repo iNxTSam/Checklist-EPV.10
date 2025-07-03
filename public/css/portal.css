@@ -1,0 +1,363 @@
+/* Portal CEET Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.header-sena {
+    background: #39a900;
+    color: white;
+    padding: 20px 0;
+}
+
+.sena-logo {
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #39a900;
+    font-size: 14px;
+    text-align: center;
+}
+
+.header-title {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-subtitle {
+    color: #e8f5e8;
+    font-size: 14px;
+    margin: 5px 0 0 0;
+}
+
+.portal-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin: 20px auto;
+    max-width: 1000px;
+    overflow: hidden;
+}
+
+.portal-header {
+    background: #f8f9fa;
+    padding: 20px;
+    border-bottom: 2px solid #dee2e6;
+    text-align: center;
+}
+
+.portal-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.portal-subtitle {
+    color: #666;
+    font-size: 14px;
+}
+
+.user-info {
+    background: #e9ecef;
+    padding: 15px 20px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.user-info p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.documents-table {
+    margin: 0;
+}
+
+.documents-table th {
+    background: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    color: #495057;
+    padding: 15px;
+    text-align: center;
+}
+
+.documents-table td {
+    padding: 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.document-name {
+    font-size: 14px;
+    color: #333;
+}
+
+.upload-btn {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: #138496;
+    transform: translateY(-1px);
+}
+
+.cloud-icon {
+    color: #17a2b8;
+    font-size: 24px;
+}
+
+.checkbox-col {
+    text-align: center;
+    width: 60px;
+}
+
+.upload-col {
+    text-align: center;
+    width: 120px;
+}
+
+.comments-col {
+    width: 150px;
+}
+
+.ready-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    margin: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.ready-btn:hover {
+    background: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.footer-info {
+    background: #39a900;
+    color: white;
+    padding: 20px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.hero-image {
+    width: 150px;
+    height: 100px;
+    background: linear-gradient(45deg, #17a2b8, #007bff);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    margin-left: auto;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #28a745;
+}
+
+.required-indicator {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 16px;
+    }
+    
+    .hero-image {
+        width: 120px;
+        height: 80px;
+        font-size: 10px;
+    }
+    
+    .portal-container {
+        margin: 10px;
+    }
+    
+    .documents-table {
+        font-size: 12px;
+    }
+    
+    .documents-table th,
+    .documents-table td {
+        padding: 10px 8px;
+    }
+    
+    .comments-col textarea {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sena-logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .header-title {
+        font-size: 14px;
+    }
+    
+    .portal-title {
+        font-size: 20px;
+    }
+    
+    .user-info {
+        padding: 10px;
+    }
+    
+    .user-info p {
+        font-size: 12px;
+    }
+}
+
+
+.upload-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.upload-btn:active::after {
+    width: 300px;
+    height: 300px;
+}
+
+.documents-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.documents-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+
+.document-approved {
+    background-color: #d4edda !important;
+    border-left: 4px solid #28a745;
+}
+
+.document-rejected {
+    background-color: #f8d7da !important;
+    border-left: 4px solid #dc3545;
+}
+
+.document-pending {
+    background-color: #fff3cd !important;
+    border-left: 4px solid #ffc107;
+}
+
+
+.status-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.status-indicator.approved i {
+    color: #28a745 !important;
+    animation: checkPulse 2s infinite;
+}
+
+.status-indicator.rejected i {
+    color: #dc3545 !important;
+    animation: errorPulse 2s infinite;
+}
+
+
+.comment-display {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #dee2e6;
+    font-size: 12px;
+    color: #495057;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.document-approved .comment-display {
+    background: #d1e7dd;
+    border-color: #a3cfbb;
+    color: #0f5132;
+}
+
+.document-rejected .comment-display {
+    background: #f1aeb5;
+    border-color: #ea868f;
+    color: #58151c;
+}
+
+.document-pending .comment-display {
+    background: #fff3cd;
+    border-color: #ffecb5;
+    color: #664d03;
+}
+
+
+@keyframes checkPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes errorPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+
+.documents-table th:nth-child(3) {
+    color: #28a745;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.documents-table th:nth-child(4) {
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 18px;
+}
