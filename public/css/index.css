@@ -3917,14 +3917,7 @@ input[type=button].btn-block,input[type=reset].btn-block,input[type=submit].btn-
     display: block
 }
 
-.navbar {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    padding: .5rem 1rem
-}
+
 
 .navbar>.container,.navbar>.container-fluid {
     display: flex;

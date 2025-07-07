@@ -1,41 +1,4 @@
-/* Portal CEET Styles */
-body {
-    background-color: #f8f9fa;
-    font-family: Arial, sans-serif;
-}
 
-.header-sena {
-    background: #39a900;
-    color: white;
-    padding: 20px 0;
-}
-
-.sena-logo {
-    width: 80px;
-    height: 80px;
-    background: white;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: #39a900;
-    font-size: 14px;
-    text-align: center;
-}
-
-.header-title {
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
-    margin: 0;
-}
-
-.header-subtitle {
-    color: #e8f5e8;
-    font-size: 14px;
-    margin: 5px 0 0 0;
-}
 
 .portal-container {
     background: white;
@@ -43,27 +6,8 @@ body {
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin: 20px auto;
     max-width: 1000px;
-    overflow: hidden;
 }
 
-.portal-header {
-    background: #f8f9fa;
-    padding: 20px;
-    border-bottom: 2px solid #dee2e6;
-    text-align: center;
-}
-
-.portal-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-}
-
-.portal-subtitle {
-    color: #666;
-    font-size: 14px;
-}
 
 .user-info {
     background: #e9ecef;
@@ -153,14 +97,6 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-.footer-info {
-    background: #39a900;
-    color: white;
-    padding: 20px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 1.4;
-}
 
 .hero-image {
     width: 150px;

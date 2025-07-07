@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 class Navegacion extends Controller
 {
     public function aprendiz(){
-        return view ('login/Aprendiz');
+        return view ('sample/loginAprendiz');
     }
     public function instructor(){
-        return view ('login/Instructor');
+        return view ('sample/loginInstructor');
     }
     public function documentos(){
         return view ('sample/index');
