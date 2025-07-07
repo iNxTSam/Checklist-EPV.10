@@ -1,37 +1,13 @@
-@extends('layouts.app')
-
-@section('title', 'Portal CEET - Dashboard Instructor')
-
+@extends('layouts.header')
+@section ('title', 'Documentación certificación Etapa productiva')
+@section ('titleHeader', 'Documentación certificación Etapa productiva')
+    <link href="{{ asset('css/portal.css') }}" rel="stylesheet">
 @section('content')
-<div class="header-sena">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-2">
-                <div class="sena-logo">
-                    <img src="{{ asset('img/logo-sena.png') }}" alt="Logo SENA" style="max-height: 60px;">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h1 class="header-title">Centro de Electricidad, Electrónica y Telecomunicaciones</h1>
-                <p class="header-subtitle">Regional Distrito Capital - Dashboard Instructor</p>
-            </div>
-            <div class="col-md-4 text-end">
-                <div class="hero-image">
-                    <span>Panel<br>Instructor<br>CEET</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="container">
+<section class="page-section portfolio" id="quienes_somos">
+  <div class="container" bis_skin_checked="1">
     <div class="portal-container">
-        <div class="portal-header">
-            <h2 class="portal-title">DASHBOARD INSTRUCTOR - REVISIÓN DE DOCUMENTOS</h2>
-            <p class="portal-subtitle">Gestión y revisión de documentos de estudiantes</p>
-        </div>
-
-        <div class="stats-container">
+        <div class="status-container">
             <div class="row">
                 <div class="col-md-3">
                     <div class="stat-card stat-total">
@@ -144,24 +120,9 @@
             </table>
         </div>
     </div>
-</div>
 
-<div class="footer-info">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <p><strong>Servicio Nacional de Aprendizaje SENA - CENTRO DE ELECTRICIDAD, ELECTRÓNICA Y TELECOMUNICACIONES</strong><br>
-                Dirección: Calle 52 No. 13 - 65 Bogotá D.C., Colombia • Código Postal: 111321<br>
-                Subdirección: Luis Eduardo Silva Bohórquez<br>
-                Coordinación Académica: Mercedes Sánchez, John Jaír Galindo Alzate, Luz Adriana Angel<br>
-                Diseño y Desarrollo de las Plataformas: Grupo de Investigaciones GIC2 - CEET • Webmaster: Fabián Rodríguez<br>
-                PBXdigital: (601) 546 1500 Ext. 15402 • E-mail: ceet@sena.edu.co<br><br>
-                Atención telefónica lunes a viernes 7:00 a.m. a 7:00 p.m. • Sábados 8:00 a.m. a 1:00 p.m.<br>
-                Excluye días festivos • Tel. 57 (1) 5461500 • Línea gratuita desde celular 018000 910270</p>
-            </div>
-        </div>
-    </div>
-</div>
+
+@include('layouts.footer')
 
 <script>
 function sendNotification(studentId) {
