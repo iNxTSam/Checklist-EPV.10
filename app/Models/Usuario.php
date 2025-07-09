@@ -9,10 +9,10 @@ class Usuario extends Authenticatable
     protected $table = 'usuarios'; // nombre de la tabla
 
     protected $fillable = [
-        'nombre',
-        'numero_documento',
-        'password',
-        'rol'
+        'Nombres',
+        'Apellidos',
+        'Clave',
+        'Roles_idRoles'
     ];
 
     protected $hidden = ['password'];

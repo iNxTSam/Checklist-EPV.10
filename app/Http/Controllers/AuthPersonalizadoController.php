@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\USUARIOS;
 use Illuminate\Support\Facades\Hash;
 
 class AuthPersonalizadoController extends Controller
 {
     public function loginAprendiz(Request $request)
     {
-        $usuario = Usuario::where('numero_documento', $request->numero_documento)
-                          ->where('rol', 'aprendiz')
+        $usuario = USUARIOS::where('idUsuarios', $request->numero_documento)
+                          ->where('Roles_idRoles', '3')
                           ->first();
 
         if ($usuario && Hash::check($request->password, $usuario->password)) {
@@ -23,11 +23,11 @@ class AuthPersonalizadoController extends Controller
 
     public function loginInstructor(Request $request)
     {
-        $usuario = Usuario::where('numero_documento', $request->numero_documento)
-                          ->where('rol', 'instructor')
+        $usuario = USUARIOS::where('idUsuarios', $request->numero_documento)
+                          ->where('Roles_idRoles', '2')
                           ->first();
 
-        if ($usuario && Hash::check($request->password, $usuario->password)) {
+        if ($usuario && Hash::check($request->password, $usuario->Clave)) {
             return redirect()->route('bienvenido.instructor');
         }
 

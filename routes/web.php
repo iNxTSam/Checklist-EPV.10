@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthPersonalizadoController;
+use App\Http\Controllers\Prueba;
 use Illuminate\Support\Facades\Route;
 
 // Ruta principal redirige a la vista de aprendiz
@@ -18,9 +19,11 @@ Route::post('/login-instructor', [AuthPersonalizadoController::class, 'loginInst
 
 // Rutas de bienvenida
 Route::get('/bienvenido-aprendiz', function () {
-    return 'Bienvenido Aprendiz';
+    return view('bienvenido-aprendiz');
 })->name('bienvenido.aprendiz');
 
 Route::get('/bienvenido-instructor', function () {
-    return 'Bienvenido Instructor';
+    return view('bienvenido-instructor');
 })->name('bienvenido.instructor');
+
+Route::get('/usuarios', [Prueba::class, 'index']);
