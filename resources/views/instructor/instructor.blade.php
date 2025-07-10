@@ -7,6 +7,10 @@
 <section class="page-section portfolio" id="quienes_somos">
   <div class="container" bis_skin_checked="1">
     <div class="portal-container">
+        <form action="{{ route('logout') }}" method="post">
+            @csrf
+            <button type="submit">Cerrar sesión</button>
+        </form>
         <div class="status-container">
             <div class="row">
                 <div class="col-md-3">

@@ -8,6 +8,10 @@
   <div class="container" bis_skin_checked="1">
 
     <div class="portal-container">
+        <form action="{{ route('logout') }}" method="post">
+            @csrf
+            <button type="submit">Cerrar sesión</button>
+        </form>
         <div class="portal-header">
             <h2 class="portal-title">PORTAL DE PLATAFORMAS CEET</h2>
             <p class="portal-subtitle">Los documentos deben ser en formato PDF y deben pesar menos de 5 MB</p>

@@ -4,21 +4,29 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Navegacion;
 use App\Http\Controllers\Instructor;
 use App\Http\Controllers\PortalController;
+use App\Http\Controllers\AuthPersonalizadoController;
+use App\Http\Controllers\Prueba;
 
-
+// Vista index portal
 Route::get('/', function () {
     return view('index');
 });
 
-Route::get ('/aprendizLogin', [Navegacion::class, 'aprendiz']);
+// Sample de Instructor o Aprendiz
+Route::get ('/sample', [Navegacion::class, 'documentos'])->name('login');
 
-Route::get ('/instructorLogin', [Navegacion::class, 'instructor']);
+// Vista instructor
+Route::get ('/instructorLogin', [Navegacion::class, 'instructor'])->name('vista.instructor');
+Route::get ('/buscarFicha', [Instructor::class, 'buscar'])->name('buscarficha')->middleware('auth');
+Route::get ('/instructor', [PortalController::class, 'instructor'])->name('instructor.instructor')->middleware('auth');
+Route::get ('/instructor/student/{id}', [PortalController::class, 'reviewStudent'])->name('instructor.review')->middleware('auth');
 
-Route::get ('/sample', [Navegacion::class, 'documentos']);
+// Vista aprendiz 
+Route::get ('/aprendizLogin', [Navegacion::class, 'aprendiz'])->name('vista.aprendiz');
+Route::get ('/aprendiz', [PortalController::class, 'aprendiz'])->middleware('auth');
 
-Route::get ('/buscarFicha', [Instructor::class, 'buscar']);
-
-Route::get ('/instructor', [PortalController::class, 'instructor'])->name('instructor.instructor');;
-
-Route::get ('/instructor/student/{id}', [PortalController::class, 'reviewStudent'])->name('instructor.review');;
-Route::get ('/aprendiz', [PortalController::class, 'aprendiz'])->name('aprendiz.aprendiz');;
+// Rutas que procesan los formularios
+Route::post('/login-aprendiz', [AuthPersonalizadoController::class, 'loginAprendiz'])->name('login.aprendiz');
+Route::post('/login-instructor', [AuthPersonalizadoController::class, 'loginInstructor'])->name('login.instructor');
+Route::post('/logout', [AuthPersonalizadoController::class, 'logout'])->name('logout');
+Route::get('/usuarios', [Prueba::class, 'index']);
