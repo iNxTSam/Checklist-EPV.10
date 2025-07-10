@@ -2,13 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class USUARIOS extends Model
+
+class USUARIOS extends Authenticatable
 {
+
+    use Notifiable;
     protected $table = 'Usuarios';
-    protected $primaryKey= 'idUsarios';
-    protected $connection= 'mysql'; 
+    protected $primaryKey = 'idUsuarios';
+    protected $connection = 'mysql';
+    public $incrementing = false;
     protected $fillable = [
         'idUsuarios',
         'Nombres',
@@ -24,4 +29,10 @@ class USUARIOS extends Model
     ];
     public $timestamps = false;
     public $hidden = ['Clave'];
+
+    public function getAuthPassword()
+    {
+        return $this->Clave;
+    }
+
 }

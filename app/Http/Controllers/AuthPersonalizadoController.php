@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\USUARIOS;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthPersonalizadoController extends Controller
 {
@@ -14,8 +15,11 @@ class AuthPersonalizadoController extends Controller
                           ->where('Roles_idRoles', '3')
                           ->first();
 
-        if ($usuario && Hash::check($request->password, $usuario->password)) {
-            return redirect()->route('bienvenido.aprendiz');
+        if ($usuario && Hash::check($request->password, $usuario->Clave)) {
+            Auth::login($usuario);
+            $request->session()->regenerate();
+
+            return redirect()->intended('bienvenido-aprendiz');
         }
 
         return redirect()->route('vista.aprendiz')->withErrors(['error' => 'Documento o contraseña incorrectos']);
@@ -28,9 +32,17 @@ class AuthPersonalizadoController extends Controller
                           ->first();
 
         if ($usuario && Hash::check($request->password, $usuario->Clave)) {
+            Auth::login($usuario);
+            $request->session()->regenerate();
             return redirect()->route('bienvenido.instructor');
         }
 
         return redirect()->route('vista.instructor')->withErrors(['error' => 'Documento o contraseña incorrectos']);
+    }
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
     }
 }

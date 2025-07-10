@@ -31,7 +31,6 @@
 
     <form method="POST" action="{{ route('login.aprendiz') }}">
       @csrf
-
       <label for="documento">Número de Documento Aprendiz (Sólo números)</label>
       <input type="text" id="documento" name="numero_documento" required>
 

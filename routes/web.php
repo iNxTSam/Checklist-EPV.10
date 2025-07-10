@@ -10,20 +10,22 @@ Route::get('/', function () {
 });
 
 // Vistas principales
-Route::view('/aprendiz', 'Aprendiz')->name('vista.aprendiz');
+Route::view('/aprendiz', 'Aprendiz')->name('login');
 Route::view('/instructor', 'Instructor')->name('vista.instructor');
 
 // Rutas que procesan los formularios
 Route::post('/login-aprendiz', [AuthPersonalizadoController::class, 'loginAprendiz'])->name('login.aprendiz');
 Route::post('/login-instructor', [AuthPersonalizadoController::class, 'loginInstructor'])->name('login.instructor');
+Route::post('/logout', [AuthPersonalizadoController::class, 'logout'])->name('logout');
 
 // Rutas de bienvenida
 Route::get('/bienvenido-aprendiz', function () {
     return view('bienvenido-aprendiz');
-})->name('bienvenido.aprendiz');
+})->middleware('auth');
 
 Route::get('/bienvenido-instructor', function () {
     return view('bienvenido-instructor');
 })->name('bienvenido.instructor');
+
 
 Route::get('/usuarios', [Prueba::class, 'index']);
