@@ -16,7 +16,7 @@ Route::get('/', function () {
 Route::get('/sample', [Navegacion::class, 'documentos'])->name('login');
 
 // Vista instructor
-Route::middleware(['auth', 'role:2'])->prefix('instructor')->name('instructor.')->group(function () {
+Route::middleware(['auth', 'role:2', 'no-cache'])->prefix('instructor')->name('instructor.')->group(function () {
     Route::get('/', [Instructor::class, 'buscar'])->name('buscarficha');
     Route::get('/dashboard', [PortalController::class, 'instructor'])->name('dashboard');
     Route::get('/dashboard/student/{id}', [PortalController::class, 'reviewStudent'])->name('dashboard.review');
@@ -24,14 +24,14 @@ Route::middleware(['auth', 'role:2'])->prefix('instructor')->name('instructor.')
 Route::get('/instructorLogin', [Navegacion::class, 'instructor'])->name('vista.instructor');
 
 // Vista aprendiz 
-Route::middleware(['auth', 'role:3'])->prefix('aprendiz')->name('aprendiz.')->group(function () {
+Route::middleware(['auth', 'role:3', 'no-cache'])->prefix('aprendiz')->name('aprendiz.')->group(function () {
     Route::get('/', [PortalController::class, 'aprendiz']);
 });
 Route::get('/aprendizLogin', [Navegacion::class, 'aprendiz'])->name('vista.aprendiz');
-
 
 // Rutas que procesan los formularios
 Route::post('/login-aprendiz', [AuthPersonalizadoController::class, 'loginAprendiz'])->name('login.aprendiz');
 Route::post('/login-instructor', [AuthPersonalizadoController::class, 'loginInstructor'])->name('login.instructor');
 Route::post('/logout', [AuthPersonalizadoController::class, 'logout'])->name('logout');
+
 Route::get('/usuarios', [Prueba::class, 'index']);

@@ -8,7 +8,7 @@ class Prueba extends Controller
 {
     public function index(){
         $usuarios = USUARIOS::create([
-    'idUsuarios' => 12345671,
+    'idUsuarios' => 367373,
     'Nombres' => 'Juan',
     'Apellidos' => 'Pérez',
     'Telefono' => 1234567890,
@@ -16,7 +16,7 @@ class Prueba extends Controller
     'Clave' => bcrypt('clave123'),
     'Dirrecion' => 'Mi dirección',
     'TipoDeDocumentos_idTipoDeDocumentos' => 1,
-    'Roles_idRoles' => 2,
+    'Roles_idRoles' => 3,
     'Fichas_idFichas' => 1,
     'EtapaProductvia_idEtapaProductvia' => 1
 ]);
