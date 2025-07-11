@@ -110,7 +110,7 @@
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{{ route('instructor.review', $student['id']) }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('instructor.dashboard.review', $student['id']) }}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-eye"></i> Revisar
                                 </a>
                                 <button class="btn btn-info btn-sm" onclick="sendNotification({{ $student['id'] }})">

@@ -102,7 +102,7 @@ class PortalController extends Controller
             ]
         ];
 
-        return view('instructor.instructor', compact('students'));
+        return view('Instructor.instructor', compact('students'));
     }
 
     public function reviewStudent($id)
@@ -188,7 +188,7 @@ class PortalController extends Controller
             ]
         ];
 
-        return view('instructor.review', compact('student', 'documents'));
+        return view('Instructor.review', compact('student', 'documents'));
     }
 
     public function updateDocument()

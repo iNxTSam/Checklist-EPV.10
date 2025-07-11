@@ -33,7 +33,7 @@ class AuthPersonalizadoController extends Controller
         if ($usuario && Hash::check($request->clave, $usuario->Clave)) {
             Auth::login($usuario);
             $request->session()->regenerate();
-            return redirect()->intended('buscarFicha');
+            return redirect()->intended('instructor');
         }
 
         return redirect()->route('vista.instructor')->withErrors(['error' => 'Documento o contraseña incorrectos']);

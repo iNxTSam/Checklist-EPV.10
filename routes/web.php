@@ -10,20 +10,25 @@ use App\Http\Controllers\Prueba;
 // Vista index portal
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
 
 // Sample de Instructor o Aprendiz
-Route::get ('/sample', [Navegacion::class, 'documentos'])->name('login');
+Route::get('/sample', [Navegacion::class, 'documentos'])->name('login');
 
 // Vista instructor
-Route::get ('/instructorLogin', [Navegacion::class, 'instructor'])->name('vista.instructor');
-Route::get ('/buscarFicha', [Instructor::class, 'buscar'])->name('buscarficha')->middleware('auth');
-Route::get ('/instructor', [PortalController::class, 'instructor'])->name('instructor.instructor')->middleware('auth');
-Route::get ('/instructor/student/{id}', [PortalController::class, 'reviewStudent'])->name('instructor.review')->middleware('auth');
+Route::middleware(['auth', 'role:2'])->prefix('instructor')->name('instructor.')->group(function () {
+    Route::get('/', [Instructor::class, 'buscar'])->name('buscarficha');
+    Route::get('/dashboard', [PortalController::class, 'instructor'])->name('dashboard');
+    Route::get('/dashboard/student/{id}', [PortalController::class, 'reviewStudent'])->name('dashboard.review');
+});
+Route::get('/instructorLogin', [Navegacion::class, 'instructor'])->name('vista.instructor');
 
 // Vista aprendiz 
-Route::get ('/aprendizLogin', [Navegacion::class, 'aprendiz'])->name('vista.aprendiz');
-Route::get ('/aprendiz', [PortalController::class, 'aprendiz'])->middleware('auth');
+Route::middleware(['auth', 'role:3'])->prefix('aprendiz')->name('aprendiz.')->group(function () {
+    Route::get('/', [PortalController::class, 'aprendiz']);
+});
+Route::get('/aprendizLogin', [Navegacion::class, 'aprendiz'])->name('vista.aprendiz');
+
 
 // Rutas que procesan los formularios
 Route::post('/login-aprendiz', [AuthPersonalizadoController::class, 'loginAprendiz'])->name('login.aprendiz');

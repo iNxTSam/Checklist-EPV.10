@@ -13,7 +13,7 @@
                 <label for="ficha">Ingrese el número de ficha (Sólo números)</label><br><br>
                 <input type="text" id="ficha" name="ficha" placeholder="Nº Ficha" required>
             </div>
-            <p align="center"><a href="/instructor" class="button">Aceptar</a></p><br>
+            <p align="center"><a href="{{route('instructor.dashboard')}}" class="button">Aceptar</a></p><br>
             <p align="center"><a href="/" >Cancelar y salir</a></p>
         </form>
     </div>
