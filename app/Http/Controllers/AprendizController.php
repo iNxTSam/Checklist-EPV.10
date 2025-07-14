@@ -10,7 +10,7 @@ use App\Models\ComentariosDocumento;
 
 class AprendizController extends Controller
 {
-    protected $usuario_id = 1030556208; 
+    protected $usuario_id = 1030556215; 
 
 public function aprendiz()
 {

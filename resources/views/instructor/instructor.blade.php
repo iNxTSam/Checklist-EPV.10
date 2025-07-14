@@ -60,6 +60,13 @@
         </div>
       </div>
 
+      <div class="mb-4 text-end">
+    <a href="{{ route('instructor.buscarFicha') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Volver a búsqueda de ficha
+    </a>
+      </div>
+
+
       <div class="table-responsive mt-4">
         <table class="table instructor-table">
           <thead>
@@ -91,7 +98,7 @@
                 </span>
               </td>
               <td>
-                <a href="{{ route('instructor.revision', $aprendiz->idUsuarios) }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('instructor.revision', ['id' => $aprendiz->idUsuarios, 'ficha' => request('ficha')]) }}" class="btn btn-primary btn-sm">
                   <i class="fas fa-eye"></i> Revisar
                 </a>
               </td>

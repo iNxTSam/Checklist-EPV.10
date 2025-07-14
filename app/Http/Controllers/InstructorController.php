@@ -7,7 +7,39 @@ use App\Models\Usuario;
 use Illuminate\Support\Facades\DB;
 
 class InstructorController extends Controller
-{
+{   
+        public function buscarFicha()
+    {
+        return view('instructor.buscarFicha');
+    }
+
+    public function verFicha(Request $request)
+    {
+        $numero = $request->input('ficha');
+
+        $ficha = \App\Models\Ficha::with(['usuarios.etapaProductiva.gestionEvidencias', 'usuarios.ficha'])
+                    ->where('NumeroDeFicha', $numero)
+                    ->first();
+
+        if ($ficha) {
+            $aprendices = $ficha->usuarios
+                ->where('Roles_idRoles', 2) // Solo aprendices
+                ->map(function ($usuario) {
+                    return (object)[
+                        'idUsuarios' => $usuario->idUsuarios,
+                        'Nombres' => $usuario->Nombres,
+                        'Apellidos' => $usuario->Apellidos,
+                        'ficha' => $usuario->ficha,
+                        'estado' => $this->getEstadoGeneral($usuario),
+                    ];
+                });
+
+            return view('instructor.instructor', ['aprendices' => $aprendices]);
+        }
+
+        return redirect()->route('instructor.buscarFicha')->with('mensaje', 'Ficha no encontrada');
+    }
+
     public function instructor()
     {
         $instructorId = 1234567890;
@@ -101,6 +133,7 @@ class InstructorController extends Controller
     {
         $comentarios = $request->input('comentarios', []);
         $estados = $request->input('estados', []);
+        $fichaNumero = $request->input('ficha'); // <-- capturar ficha
 
         foreach ($comentarios as $nombre => $comentario) {
             $estado = $estados[$nombre] ?? 'pendiente';
@@ -111,8 +144,10 @@ class InstructorController extends Controller
             );
         }
 
-        return redirect()->route('instructor.instructor')->with('success', 'Revisión guardada');
+        return redirect()->route('ficha.buscar', ['ficha' => $fichaNumero])
+            ->with('success', 'Revisión guardada');
     }
+
 
     private function getEstadoGeneral($user)
     {

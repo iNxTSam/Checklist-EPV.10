@@ -19,7 +19,13 @@
         <div class="col-md-3"><strong>Fecha Envío:</strong> {{ \Carbon\Carbon::parse($student['submitted_at'])->format('d/m/Y') }}</div>
       </div>
 
-      <form method="POST" action="{{ route('instructor.guardarRevision', $student['id']) }}">
+
+  <form method="POST" action="{{ route('instructor.guardarRevision', $student['id']) }}">
+    @csrf
+      <input type="hidden" name="ficha" value="{{ request('ficha') }}">
+
+
+
         @csrf
 
         <div class="table-responsive">
@@ -80,7 +86,6 @@
         <textarea class="form-control comment-textarea" rows="2" data-document-id="{{ $document['id'] }}">{{ $document['comment'] }}</textarea>
     </td>
 
-    {{-- Campos ocultos por documento --}}
     <input type="hidden" name="comentarios[{{ $document['campo'] }}]" class="comentario-hidden" data-id="{{ $document['id'] }}">
     <input type="hidden" name="estados[{{ $document['campo'] }}]" class="estado-hidden" data-id="{{ $document['id'] }}" value="pending">
 </tr>
@@ -110,22 +115,22 @@
             const approve = document.querySelector(`.approve-checkbox[data-document-id="${documentId}"]`);
             const reject = document.querySelector(`.reject-checkbox[data-document-id="${documentId}"]`);
 
-            // Desmarcar el otro si uno se marca
+ 
             if (checkbox.classList.contains('approve-checkbox') && checkbox.checked) {
                 reject.checked = false;
             } else if (checkbox.classList.contains('reject-checkbox') && checkbox.checked) {
                 approve.checked = false;
             }
 
-            // Determinar estado
+     
             let estado = 'pending';
             if (approve.checked) estado = 'approved';
             if (reject.checked) estado = 'rejected';
 
-            // Actualizar input oculto
+  
             document.querySelector(`.estado-hidden[data-id="${documentId}"]`).value = estado;
 
-            // Cambiar clase de la fila
+  
             const row = document.querySelector(`tr[data-document-id="${documentId}"]`);
             row.classList.remove('document-approved', 'document-rejected', 'document-pending');
 
@@ -137,10 +142,10 @@
                 row.classList.add('document-pending');
             }
 
-            // Actualizar ícono visual
+ 
             const status = row.querySelector('.status-indicator');
             status.classList.remove('approved', 'rejected');
-            status.innerHTML = ''; // Limpiar ícono
+            status.innerHTML = '';
 
             if (estado === 'approved') {
                 status.classList.add('approved');
