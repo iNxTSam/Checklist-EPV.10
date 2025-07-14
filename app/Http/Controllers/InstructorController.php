@@ -16,29 +16,42 @@ class InstructorController extends Controller
     public function verFicha(Request $request)
     {
         $numero = $request->input('ficha');
+        $instructorId = 1234567890;
 
         $ficha = \App\Models\Ficha::with(['usuarios.etapaProductiva.gestionEvidencias', 'usuarios.ficha'])
                     ->where('NumeroDeFicha', $numero)
                     ->first();
 
-        if ($ficha) {
-            $aprendices = $ficha->usuarios
-                ->where('Roles_idRoles', 2) // Solo aprendices
-                ->map(function ($usuario) {
-                    return (object)[
-                        'idUsuarios' => $usuario->idUsuarios,
-                        'Nombres' => $usuario->Nombres,
-                        'Apellidos' => $usuario->Apellidos,
-                        'ficha' => $usuario->ficha,
-                        'estado' => $this->getEstadoGeneral($usuario),
-                    ];
-                });
-
-            return view('instructor.instructor', ['aprendices' => $aprendices]);
+        if (!$ficha) {
+            return redirect()->route('instructor.buscarFicha')->with('mensaje', 'Ficha no encontrada');
         }
 
-        return redirect()->route('instructor.buscarFicha')->with('mensaje', 'Ficha no encontrada');
+
+        $asignada = DB::table('InstructorFicha')
+                        ->where('idInstructor', $instructorId)
+                        ->where('idFicha', $ficha->idFichas)
+                        ->exists();
+
+        if (!$asignada) {
+            return redirect()->route('instructor.buscarFicha')->with('mensaje', 'No tienes acceso a esta ficha');
+        }
+
+    
+        $aprendices = $ficha->usuarios
+            ->where('Roles_idRoles', 2) 
+            ->map(function ($usuario) {
+                return (object)[
+                    'idUsuarios' => $usuario->idUsuarios,
+                    'Nombres' => $usuario->Nombres,
+                    'Apellidos' => $usuario->Apellidos,
+                    'ficha' => $usuario->ficha,
+                    'estado' => $this->getEstadoGeneral($usuario),
+                ];
+            });
+
+        return view('instructor.instructor', ['aprendices' => $aprendices]);
     }
+
 
     public function instructor()
     {

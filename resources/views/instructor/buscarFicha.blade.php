@@ -22,6 +22,12 @@
     @if(session('mensaje') === 'Ficha no encontrada')
         <p style="color:red; text-align: center;">Ficha no encontrada.</p>
     @endif
+    @if(session('mensaje'))
+    <div class="alert alert-danger">
+        {{ session('mensaje') }}
+    </div>
+    @endif
+
 </div>
 
 @include('layouts.footer')
