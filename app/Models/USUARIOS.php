@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notifiable; 
 
 
 class USUARIOS extends Authenticatable
@@ -34,5 +34,16 @@ class USUARIOS extends Authenticatable
     {
         return $this->Clave;
     }
-
+     public function descripcionEvidencias()
+    {
+        return $this->hasMany(DescripcionEvidencias::class, 'gestionevidencias_idGestionEvidencias');
+    }
+        public function ficha()
+    {
+        return $this->belongsTo(Ficha::class, 'Fichas_idFichas');
+    }
+        public function rol()
+    {
+        return $this->belongsTo(Rol::class, 'Roles_idRoles');
+    }
 }

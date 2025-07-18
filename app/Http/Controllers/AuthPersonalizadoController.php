@@ -12,7 +12,7 @@ class AuthPersonalizadoController extends Controller
     public function loginAprendiz(Request $request)
     {
         $usuario = USUARIOS::where('idUsuarios', $request->numeroDocumento)
-                          ->where('Roles_idRoles', '3')
+                          ->where('Roles_idRoles', '2')
                           ->first();
 
         if ($usuario && Hash::check($request->clave, $usuario->Clave)) {
@@ -21,13 +21,13 @@ class AuthPersonalizadoController extends Controller
             return redirect()->intended('aprendiz');
         }
 
-        return redirect()->route('login')->withErrors(['error' => 'Documento o contraseña incorrectos']);
+        return redirect()->route('vista.aprendiz')->withErrors(['error' => 'Documento o contraseña incorrectos']);
     }
 
     public function loginInstructor(Request $request)
     {
         $usuario = USUARIOS::where('idUsuarios', $request->numeroDocumento)
-                          ->where('Roles_idRoles', '2')
+                          ->where('Roles_idRoles', '1')
                           ->first();
 
         if ($usuario && Hash::check($request->clave, $usuario->Clave)) {
