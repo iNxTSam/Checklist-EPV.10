@@ -33,12 +33,14 @@ class AuthPersonalizadoController extends Controller
         if ($usuario && Hash::check($request->clave, $usuario->Clave)) {
             Auth::login($usuario);
             $request->session()->regenerate();
-            return redirect()->intended('instructor');
+            return redirect()->intended('instructor.buscarFicha');
         }
 
-        return redirect()->route('vista.instructor')->withErrors(['error' => 'Documento o contraseña incorrectos']);
+        return redirect()->route('vista.buscarFicha')->withErrors(['error' => 'Documento o contraseña incorrectos']);
     }
-    public function logout(Request $request){
+
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

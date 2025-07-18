@@ -46,4 +46,8 @@ class USUARIOS extends Authenticatable
     {
         return $this->belongsTo(Rol::class, 'Roles_idRoles');
     }
+    public function fichasAsignadas()
+{
+    return $this->belongsToMany(Ficha::class, 'instructorficha', 'idInstructor', 'idFicha');
+}
 }

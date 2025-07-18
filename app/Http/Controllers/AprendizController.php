@@ -2,28 +2,26 @@
 
 namespace App\Http\Controllers;
 
-
-
 use App\Models\USUARIOS;
 use Illuminate\Http\Request;
 use App\Models\DescripcionEvidencias;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GestionRutas;
-use App\Models\EtapaProductiva;
 
 class AprendizController extends Controller
 {
-
     public function aprendiz()
     {
         $usuario = Auth::user();
 
 
-        $comentarios = DescripcionEvidencias::where('idUsuario', $usuario->idUsuarios)->get()->keyBy('nombreDocumento');
+        $comentarios = DescripcionEvidencias::where('idUsuario', $usuario->idUsuarios)
+            ->get()
+            ->keyBy('nombreDocumento');
 
-        // Obtener la evidencia y sus rutas asociadas
-        $evidencia = DescripcionEvidencias::where('idUsuario', $usuario->idUsuarios)->first();
-        $evidencias = $evidencia?->gestionRutas;
+
+        $evidencias = GestionRutas::where('idGestionRutas', $usuario->idUsuarios)->first();
+
 
         $documentos = [
             ['campo' => 'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva', 'nombre' => 'Formato: Planeación, seguimiento y evaluación Etapa Productiva (F-023 Final)'],
@@ -37,21 +35,21 @@ class AprendizController extends Controller
 
         $docsConDatos = [];
         foreach ($documentos as $doc) {
+            $campo = $doc['campo'];
+            $contenido = $evidencias?->{$campo};
+            $ruta = $contenido ? asset('storage/' . $contenido) : null;
 
-            $contenido = $evidencias?->{$doc['campo']};   
-                $ruta = null;
-                $ruta = $contenido ? asset('storage/' . $contenido) : null;
-            
-            $comentario = $comentarios[$doc['campo']] ?? null;
-            $estado = $comentario?->estadodocumentacion_idEstadoEtapa ?? 1;
+            $comentario = $comentarios[$campo] ?? null;
+            $estado = $comentario?->estado ?? 'Pendiente'; 
 
             $docsConDatos[] = [
                 'name' => $doc['nombre'],
-                'field' => $doc['campo'],
+                'field' => $campo,
                 'exists' => !empty($contenido),
-                'approved' => $estado === 2,
-                'rejected' => $estado === 3,
+                'approved' => strtolower($estado) === 'aprobado',
+                'rejected' => strtolower($estado) === 'rechazado',
                 'comment' => $comentario->comentario ?? 'Sin comentarios',
+                'estado' => $estado,
                 'ruta' => $ruta,
             ];
         }
@@ -62,11 +60,8 @@ class AprendizController extends Controller
         ]);
     }
 
-
-
     public function subirDocumentos(Request $request)
     {
-
         $campos = [
             'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva',
             'comprobanteInscripcionEnElAplicativoAgenciaPublicaDelEmpleoSena',
@@ -79,12 +74,9 @@ class AprendizController extends Controller
 
         $usuario = Auth::user();
         if (!$usuario) {
-
             return redirect()->route('vista.aprendiz')->with('error', 'Debe iniciar sesión para subir documentos.');
         }
 
-        $evidencia = DescripcionEvidencias::where('idUsuario', $usuario->idUsuarios)->first();
-        $evidencias = $evidencia?->gestionRutas;
         $data = [];
 
         foreach ($campos as $campo) {
@@ -99,7 +91,6 @@ class AprendizController extends Controller
                     $filename = $usuario->idUsuarios . '_' . $campo . '.pdf';
                     $path = $file->storeAs('documents', $filename, 'public');
 
-
                     $data[$campo] = $path;
 
 
@@ -110,8 +101,7 @@ class AprendizController extends Controller
                         ],
                         [
                             'comentario' => null,
-                            'estadodocumentacion_idEstadoEtapa' => 1
-
+                            'estado' => 'Pendiente'
                         ]
                     );
                 }
@@ -119,8 +109,6 @@ class AprendizController extends Controller
         }
 
         if (!empty($data)) {
-            $gestionRuta = $evidencia?->gestionRutas;
-
             GestionRutas::updateOrCreate(
                 ['idGestionRutas' => $usuario->idUsuarios],
                 $data

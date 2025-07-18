@@ -2,49 +2,57 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\USUARIOS;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\USUARIOS;
+use App\Models\Ficha;
+use App\Models\descripcionEvidencias;
+use App\Models\gestionRutas;
 
 class InstructorController extends Controller
 {
-    public function instructor()
+    public function buscarFicha()
     {
-        $instructorId = 1234567890;
+        return view('instructor.buscarFicha');
+    }
 
-        $fichas = DB::table('InstructorFicha')
+    public function verFicha(Request $request)
+    {
+        $numero = $request->input('ficha');
+        $instructorId = 3123123; 
+
+        $ficha = Ficha::with(['usuarios.ficha'])
+            ->where('NumeroDeFicha', $numero)
+            ->first();
+
+        if (!$ficha) {
+            return redirect()->route('instructor.buscarFicha')->with('mensaje', 'Ficha no encontrada');
+        }
+
+        $asignada = DB::table('instructorficha')
             ->where('idInstructor', $instructorId)
-            ->pluck('idFicha');
+            ->where('idFicha', $ficha->idFichas)
+            ->exists();
 
-        $usuarios = USUARIOS::where('Roles_idRoles', 2)
-            ->whereIn('Fichas_idFichas', $fichas)
-            ->with('ficha', 'etapaProductiva.gestionEvidencias')
-            ->get();
-
-        $students = collect();
-
-        foreach ($usuarios as $user) {
-            $students->push((object)[
-                'idUsuarios' => $user->idUsuarios,
-                'Nombres' => $user->Nombres,
-                'Apellidos' => $user->Apellidos,
-                'ficha' => $user->ficha,
-                'estado' => $this->getEstadoGeneral($user),
-            ]);
+        if (!$asignada) {
+            return redirect()->route('instructor.buscarFicha')->with('mensaje', 'No tienes acceso a esta ficha');
         }
 
-        if ($students->isEmpty()) {
-            $students->push((object)[
-                'idUsuarios' => 1030556208,
-                'Nombres' => 'Aprendiz',
-                'Apellidos' => 'Ejemplo',
-                'ficha' => (object)['NumeroDeFicha' => '123456'],
-                'estado' => 'Pendiente',
-            ]);
-        }
+        $aprendices = $ficha->usuarios
+            ->where('Roles_idRoles', 2)
+            ->map(function ($usuario) {
+                return (object)[
+                    'idUsuarios' => $usuario->idUsuarios,
+                    'Nombres' => $usuario->Nombres,
+                    'Apellidos' => $usuario->Apellidos,
+                    'ficha' => $usuario->ficha,
+                    'estado' => $this->getEstadoGeneral($usuario),
+                ];
+            });
 
         return view('instructor.instructor', [
-            'aprendices' => $students
+            'aprendices' => $aprendices,
+            'fichaNumero' => $numero
         ]);
     }
 
@@ -60,27 +68,27 @@ class InstructorController extends Controller
             ['campo' => 'formatoEntregaDeDocumentos', 'nombre' => 'Formato entrega de documentos'],
         ];
 
-        $user = USUARIOS::with('etapaProductiva.gestionEvidencias')->find($id);
-        if (!$user) abort(404, 'Aprendiz no encontrado');
+        $user = USUARIOS::findOrFail($id);
+        $ruta = gestionRutas::where('idGestionRutas', $id)->first();
 
-        $evidencias = $user->etapaProductiva?->gestionEvidencias;
+        $documents = collect($documentos)->map(function ($doc, $index) use ($ruta, $user) {
+            $file = $ruta?->{$doc['campo']};
 
-        $documents = collect($documentos)->map(function ($doc, $index) use ($evidencias, $user) {
-            $file = $evidencias?->{$doc['campo']};
-
-            $comentarioData = DB::table('ComentariosDocumento')
-                ->where('idUsuario', $user->idUsuarios)
+            $descripcion = descripcionEvidencias::where('idUsuario', $user->idUsuarios)
                 ->where('nombreDocumento', $doc['campo'])
                 ->first();
+
+            $estado = $descripcion?->estado ?? 'Pendiente';
+            $comentario = $descripcion?->comentario ?? '';
 
             return [
                 'id' => $index + 1,
                 'name' => $doc['nombre'],
                 'campo' => $doc['campo'],
-                'comment' => $comentarioData?->comentario,
-                'estado' => $comentarioData?->estado ?? 'pendiente',
-                'approved' => $comentarioData?->estado === 'aprobado',
-                'rejected' => $comentarioData?->estado === 'rechazado',
+                'comment' => $comentario,
+                'estado' => $estado,
+                'approved' => $estado === 'Aprobado',
+                'rejected' => $estado === 'Rechazado',
                 'file_path' => $file ? asset("storage/{$file}") : null,
                 'uploaded_at' => $file ? now() : null,
             ];
@@ -90,7 +98,7 @@ class InstructorController extends Controller
             'id' => $user->idUsuarios,
             'name' => "{$user->Nombres} {$user->Apellidos}",
             'document' => $user->idUsuarios,
-            'program' => 'Tecnología en Electrónica',
+            'program' => 'Tecnología en Electrónica', 
             'submitted_at' => now(),
         ];
 
@@ -101,49 +109,42 @@ class InstructorController extends Controller
     {
         $comentarios = $request->input('comentarios', []);
         $estados = $request->input('estados', []);
+        $fichaNumero = $request->input('ficha');
 
         foreach ($comentarios as $nombre => $comentario) {
-            $estado = $estados[$nombre] ?? 'pendiente';
+            $estadoInput = $estados[$nombre] ?? 'pending';
 
-            DB::table('ComentariosDocumento')->updateOrInsert(
+
+            $estado = match (strtolower($estadoInput)) {
+                'approved' => 'Aprobado',
+                'rejected' => 'Rechazado',
+                default => 'Pendiente',
+            };
+
+            descripcionEvidencias::updateOrCreate(
                 ['idUsuario' => $id, 'nombreDocumento' => $nombre],
                 ['comentario' => $comentario, 'estado' => $estado]
             );
         }
 
-        return redirect()->route('instructor.instructor')->with('success', 'Revisión guardada');
+        return redirect()->route('ficha.buscar', ['ficha' => $fichaNumero])
+            ->with('success', 'Revisión guardada correctamente.');
     }
 
-    private function getEstadoGeneral($user)
+    private function getEstadoGeneral($usuario)
     {
-        $documentos = [
-            'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva',
-            'comprobanteInscripcionEnElAplicativoAgenciaPublicaDelEmpleoSena',
-            'pazYSalvoAcademicoAdministrativo',
-            'fotocopiaDocumentoDeIdentidad',
-            'certificadoAprobacionEmpresaTerminacionEtapaProductiva',
-            'certificadoAsistenciaPruebaSaberTTIcfes',
-            'formatoEntregaDeDocumentos'
-        ];
+        $documentos = descripcionEvidencias::where('idUsuario', $usuario->idUsuarios)->get();
 
-        $aprobados = 0;
-        $rechazados = 0;
+        if ($documentos->isEmpty()) return 'Pendiente';
 
-        foreach ($documentos as $doc) {
-            $estado = DB::table('ComentariosDocumento')
-                ->where('idUsuario', $user->idUsuarios)
-                ->where('nombreDocumento', $doc)
-                ->value('estado');
+        $estados = $documentos->pluck('estado');
 
-            if ($estado === 'aprobado') {
-                $aprobados++;
-            } elseif ($estado === 'rechazado') {
-                $rechazados++;
-            }
+        if ($estados->contains('Rechazado')) {
+            return 'Rechazado';
+        } elseif ($estados->contains('Pendiente') || $estados->contains(null)) {
+            return 'Pendiente';
         }
 
-        if ($aprobados === count($documentos)) return 'Aprobado';
-        if ($rechazados > 0) return 'Rechazado';
-        return 'Pendiente';
+        return 'Aprobado';
     }
 }

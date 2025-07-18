@@ -10,21 +10,23 @@ class Prueba extends Controller
 {
     public function index()
     {
-        $id = 654654;
+        $id = 3123123;
+
+
         $usuarios = USUARIOS::create([
             'idUsuarios' => $id,
-            'Nombres' => 'Juan',
+            'Nombres' => 'uwu',
             'Apellidos' => 'Rey',
             'Telefono' => 3131234567,
             'Correo' => 'juan@sena.edu.co',
             'Clave' => bcrypt('clave123'),
             'Dirrecion' => 'Mi dirección',
             'TipoDeDocumentos_idTipoDeDocumentos' => 1,
-            'Roles_idRoles' => 2,
+            'Roles_idRoles' => 1,
             'Fichas_idFichas' => 1,
             'EtapaProductvia_idEtapaProductvia' => 1
         ]);
-        $contador = 0;
+
         $nombres = [
             'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva',
             'comprobanteInscripcionEnElAplicativoAgenciaPublicaDelEmpleoSena',
@@ -34,16 +36,19 @@ class Prueba extends Controller
             'certificadoAsistenciaPruebaSaberTTIcfes',
             'formatoEntregaDeDocumentos'
         ];
-        do {
-            $descripcionEvidencias = DescripcionEvidencias::create([
-                'idUsuario' => $id,
-                'estadodocumentacion_idEstadoEtapa' => 1,
-                'nombreDocumento' => $nombres[$contador],
-                'comentario' => null,
-                $contador++
-            ]);
-        } while ($contador <= 6);
 
+        $descripcionEvidencias = [];
+
+        foreach ($nombres as $nombre) {
+            $descripcionEvidencias[] = DescripcionEvidencias::create([
+                'idUsuario' => $id,
+                'nombreDocumento' => $nombre,
+                'comentario' => null,
+                'estado' => 'pendiente' 
+            ]);
+        }
+
+ 
         $gestionRutas = GestionRutas::create([
             'idGestionRutas' => $id,
             'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva' => null,
@@ -55,7 +60,10 @@ class Prueba extends Controller
             'formatoEntregaDeDocumentos' => null,
         ]);
 
-        return response()->json([$usuarios, $descripcionEvidencias, $gestionRutas]);
+        return response()->json([
+            'usuario' => $usuarios,
+            'descripcionEvidencias' => $descripcionEvidencias,
+            'gestionRutas' => $gestionRutas
+        ]);
     }
-
 }

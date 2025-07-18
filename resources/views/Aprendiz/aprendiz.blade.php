@@ -9,9 +9,10 @@
 <section class="page-section portfolio" id="quienes_somos">
   <div class="container">
     <form action="{{ route('logout') }}" method="post">
-            @csrf
-            <button type="submit">Cerrar sesión</button>
-        </form>
+        @csrf
+        <button type="submit">Cerrar sesión</button>
+    </form>
+
     <div class="portal-container">
         <div class="portal-header">
             <h2 class="portal-title">PORTAL DE PLATAFORMAS CEET</h2>
@@ -42,82 +43,82 @@
                             <th style="width: 29%;">Comentarios</th>
                         </tr>
                     </thead>
-                   <tbody>
-    @foreach($documentos as $doc)
-    <tr class="
-        @if($doc['approved']) document-approved 
-        @elseif($doc['rejected']) document-rejected 
-        @else document-pending 
-        @endif
-    ">
-        <td class="document-name">
-            {{ $doc['name'] }}
-            <span class="required-indicator">*</span>
-        </td>
+                    <tbody>
+                        @php $mostrarBoton = false; @endphp
+                        @foreach($documentos as $doc)
+                            @php
+                                $estado = strtolower($doc['estado'] ?? 'pendiente');
+                                $aprobado = $estado === 'aprobado';
+                                $rechazado = $estado === 'rechazado';
+                                $pendiente = !$aprobado && !$rechazado;
+                                if ($rechazado || !$doc['exists']) $mostrarBoton = true;
+                            @endphp
+                            <tr class="
+                                @if($aprobado) document-approved 
+                                @elseif($rechazado) document-rejected 
+                                @else document-pending 
+                                @endif
+                            ">
+                                <td class="document-name">
+                                    {{ $doc['name'] }}
+                                    <span class="required-indicator">*</span>
+                                </td>
 
-        <td class="upload-col">
-            @if($doc['rejected'] || !$doc['exists'] )
-                <label class="upload-btn" for="file_{{ $doc['field'] }}">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </label>
-                <input 
-                    type="file" 
-                    id="file_{{ $doc['field'] }}" 
-                    name="{{ $doc['field'] }}" 
-                    accept="application/pdf" 
-                    style="display:none"
-                    onchange="document.getElementById('filename_{{ $doc['field'] }}').textContent = this.files[0]?.name || ''"
-                >
-                <div id="filename_{{ $doc['field'] }}" style="margin-top:5px; font-size: 12px; color: #555;"></div>
-            @else
-                <div style="font-size: 12px; color: #555;">Archivo enviado</div>
-                @if($doc['ruta'])
-                    <a href="{{ $doc['ruta'] }}" target="_blank" style="font-size: 12px;">Ver documento</a>
-                @endif
-            @endif
-        </td>
+                                <td class="upload-col">
+                                    @if($rechazado || !$doc['exists'])
+                                        <label class="upload-btn" for="file_{{ $doc['field'] }}">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </label>
+                                        <input 
+                                            type="file" 
+                                            id="file_{{ $doc['field'] }}" 
+                                            name="{{ $doc['field'] }}" 
+                                            accept="application/pdf" 
+                                            style="display:none"
+                                            onchange="document.getElementById('filename_{{ $doc['field'] }}').textContent = this.files[0]?.name || ''"
+                                        >
+                                        <div id="filename_{{ $doc['field'] }}" style="margin-top:5px; font-size: 12px; color: #555;"></div>
+                                    @else
+                                        <div style="font-size: 12px; color: #555;">Archivo enviado</div>
+                                        @if($doc['ruta'])
+                                            <a href="{{ $doc['ruta'] }}" target="_blank" style="font-size: 12px;">Ver documento</a>
+                                        @endif
+                                    @endif
+                                </td>
 
-        <td class="checkbox-col text-center">
-            @if($doc['approved'])
-                <i class="fas fa-check-circle text-success" style="font-size: 20px;"></i>
-            @else
-                <i class="far fa-circle text-muted" style="font-size: 20px;"></i>
-            @endif
-        </td>
+                                <td class="checkbox-col text-center">
+                                    @if($aprobado)
+                                        <i class="fas fa-check-circle text-success" style="font-size: 20px;"></i>
+                                    @else
+                                        <i class="far fa-circle text-muted" style="font-size: 20px;"></i>
+                                    @endif
+                                </td>
 
-        <td class="checkbox-col text-center">
-            @if($doc['rejected'])
-                <i class="fas fa-times-circle text-danger" style="font-size: 20px;"></i>
-            @else
-                <i class="far fa-circle text-muted" style="font-size: 20px;"></i>
-            @endif
-        </td>
+                                <td class="checkbox-col text-center">
+                                    @if($rechazado)
+                                        <i class="fas fa-times-circle text-danger" style="font-size: 20px;"></i>
+                                    @else
+                                        <i class="far fa-circle text-muted" style="font-size: 20px;"></i>
+                                    @endif
+                                </td>
 
-        <td class="comments-col">
-            <div class="comment-display">
-                {{ $doc['comment'] ?? 'Sin comentarios' }}
-            </div>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
+                                <td class="comments-col">
+                                    <div class="comment-display">
+                                        {{ $doc['comment'] ?? 'Sin comentarios' }}
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
                 </table>
-                    @php
-                        $mostrarBoton = false;
-                        foreach ($documentos as $doc) {
-                            if ($doc['rejected'] || !$doc['exists']) {
-                                $mostrarBoton = true;
-                                break;
-                            }
-                        }
-                    @endphp
-                    @if ($mostrarBoton)
-                        <div class="text-center">
-                            <button type="submit" class="ready-btn">
-                                Subir documentos
-                            </button>
-                        </div>
-                    @endif
+
+                @if ($mostrarBoton)
+                    <div class="text-center">
+                        <button type="submit" class="ready-btn">
+                            Subir documentos
+                        </button>
+                    </div>
+                @endif
             </form>
         </div>
     </div>

@@ -15,4 +15,15 @@ class Ficha extends Model
     {
         return $this->hasMany(USUARIOS::class, 'Fichas_idFichas');
     }
+
+    public function aprendices()
+{
+    return $this->hasMany(USUARIOS::class, 'Fichas_idFichas')->where('Roles_idRoles', 2); // Solo aprendices
+}
+
+public function instructores()
+{
+    return $this->belongsToMany(USUARIOS::class, 'instructorficha', 'idFicha', 'idInstructor');
+}
+    
 }
