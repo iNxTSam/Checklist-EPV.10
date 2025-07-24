@@ -8,6 +8,7 @@ use App\Models\USUARIOS;
 use App\Models\Ficha;
 use App\Models\descripcionEvidencias;
 use App\Models\gestionRutas;
+use Illuminate\Support\Facades\Auth;
 
 class InstructorController extends Controller
 {
@@ -19,7 +20,8 @@ class InstructorController extends Controller
     public function verFicha(Request $request)
     {
         $numero = $request->input('ficha');
-        $instructorId = 3123123; 
+        $usuario = Auth::user();
+        $instructorId = $usuario->idUsuarios; 
 
         $ficha = Ficha::with(['usuarios.ficha'])
             ->where('NumeroDeFicha', $numero)
@@ -127,7 +129,7 @@ class InstructorController extends Controller
             );
         }
 
-        return redirect()->route('ficha.buscar', ['ficha' => $fichaNumero])
+        return redirect()->route('instructor.ficha.buscar', ['ficha' => $fichaNumero])
             ->with('success', 'Revisión guardada correctamente.');
     }
 

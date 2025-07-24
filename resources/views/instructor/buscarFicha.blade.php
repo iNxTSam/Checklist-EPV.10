@@ -7,7 +7,7 @@
 <div class="content">
     <p><strong>Respetado(a) Usuario(a) CEET:</strong> La plataforma "DOCUMENTACIÓN CERTIFICACIÓN CEET", ha sido desarrollada para la gestión de documentos y certificación de la Comunidad CEET.</p>
 
-    <form action="{{ route('ficha.buscar') }}" method="GET">
+    <form action="{{ route('instructor.ficha.buscar') }}" method="GET">
 
         <div class="form-group">
             <label for="ficha">Ingrese el número de ficha (Sólo números)</label><br><br>

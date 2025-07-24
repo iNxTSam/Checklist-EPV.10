@@ -10,7 +10,7 @@ class Prueba extends Controller
 {
     public function index()
     {
-        $id = 3123123;
+        $id = 3121;
 
 
         $usuarios = USUARIOS::create([
@@ -22,7 +22,7 @@ class Prueba extends Controller
             'Clave' => bcrypt('clave123'),
             'Dirrecion' => 'Mi dirección',
             'TipoDeDocumentos_idTipoDeDocumentos' => 1,
-            'Roles_idRoles' => 1,
+            'Roles_idRoles' => 2,
             'Fichas_idFichas' => 1,
             'EtapaProductvia_idEtapaProductvia' => 1
         ]);

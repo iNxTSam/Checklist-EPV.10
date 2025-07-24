@@ -18,11 +18,12 @@ Route::get('/', function () {
 Route::get('/sample', [Navegacion::class, 'documentos'])->name('login');
 
 // Vista instructor
-
-Route::get('/buscarFicha', [InstructorController::class, 'buscarFicha'])->name('instructor.buscarFicha');
-Route::get('/buscarFicha/resultado', [InstructorController::class, 'verFicha'])->name('ficha.buscar');
-Route::get('/instructor/revision/{id}', [InstructorController::class, 'reviewStudent'])->name('instructor.revision');
-Route::post('/instructor/revision/{id}/guardar', [InstructorController::class, 'guardarRevision'])->name('instructor.guardarRevision');
+Route::middleware(['auth', 'role:1', 'no-cache'])->prefix('instructor')->name('instructor.')->group(function () {
+    Route::get('/', [InstructorController::class, 'buscarFicha'])->name('buscarFicha');
+    Route::get('/buscarFicha/resultado', [InstructorController::class, 'verFicha'])->name('ficha.buscar');
+    Route::get('/instructor/revision/{id}', [InstructorController::class, 'reviewStudent'])->name('revision');
+    Route::post('/instructor/revision/{id}/guardar', [InstructorController::class, 'guardarRevision'])->name('guardarRevision');
+});
 
 Route::get('/instructorLogin', [Navegacion::class, 'instructor'])->name('vista.instructor');
 
