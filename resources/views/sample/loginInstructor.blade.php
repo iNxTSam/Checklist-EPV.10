@@ -10,17 +10,23 @@
   gestión de documentos y certificación de la Comunidad CEET.</p>
 <p><strong>Inicio de sesión para Instructores, Coordinaciones, Apoyos y Subdirección.</strong></p>
 
-<form>
+@if($errors->any())
+    <div class="errores" style="color:red;">
+    {{ $errors->first('error') }}
+    </div>
+  @endif
+<form method="post" action="{{ route('login.instructor') }}">
+  @csrf
   <label for="documento">Número de Documento Instructor *(Sólo números)</label>
-  <input type="text" id="documento" name="documento" required>
+  <input type="text" id="numeroDocumento" name="numeroDocumento" required>
 
   <label for="contrasena">Contraseña de acceso</label>
-  <input type="password" id="contrasena" name="contrasena" required>
+  <input type="password" id="clave" name="clave" required>
 
   <a href="#" class="link">¿Olvidó su contraseña?</a>
 
 
-    <p align="center"><a href="/buscarFicha" class="aceptar" >Aceptar</a></p>
+    <p align="center"><button type="submit" class="aceptar" >Aceptar</button></p>
     <p align="center"><a href="/" class="cancelar">Cancelar y salir</a></p>
 
 </form>
