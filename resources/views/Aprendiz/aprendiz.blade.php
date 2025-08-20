@@ -8,10 +8,7 @@
 
 <section class="page-section portfolio" id="quienes_somos">
   <div class="container">
-    <form action="{{ route('logout') }}" method="post">
-        @csrf
-        <button type="submit">Cerrar sesión</button>
-    </form>
+    
 
     <div class="portal-container">
         <div class="portal-header">

@@ -39,7 +39,10 @@
           <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="https://electricidadelectronicaytelecomu.blogspot.com/" target="_blank">Blog CEET</a>
         </li>
           
-		  		
+		  		<form action="{{ route('logout') }}" method="post">
+        @csrf
+        <button type="submit">Cerrar sesión</button>
+    </form>
 			
 	      <li class="nav-item mx-0 mx-lg-1"></li>
 		  
