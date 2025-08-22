@@ -10,12 +10,12 @@ class Prueba extends Controller
 {
     public function index()
     {
-        $id = 3121;
+        $id = 321;
 
 
         $usuarios = USUARIOS::create([
             'idUsuarios' => $id,
-            'Nombres' => 'uwu',
+            'Nombres' => 'ewe',
             'Apellidos' => 'Rey',
             'Telefono' => 3131234567,
             'Correo' => 'juan@sena.edu.co',
