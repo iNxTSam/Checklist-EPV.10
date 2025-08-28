@@ -10,13 +10,17 @@ class Prueba extends Controller
 {
     public function index()
     {
+
         $id = 12345678;
+
 
 
         $usuarios = USUARIOS::create([
             'idUsuarios' => $id,
-            'Nombres' => 'Juan',
-            'Apellidos' => 'Casas',
+
+            'Nombres' => 'ewe',
+            'Apellidos' => 'Rey',
+
             'Telefono' => 3131234567,
             'Correo' => 'Jenny@sena.edu.co',
             'Clave' => bcrypt('Clave123'),
