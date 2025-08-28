@@ -1,4 +1,4 @@
-@extends('layouts.header')
+@extends('layouts.headerLogged')
 @section('title', 'Documentación certificación Etapa productiva')
 @section('titleHeader', 'Documentación certificación Etapa productiva')
 <link href="{{ asset('css/portal.css') }}" rel="stylesheet">
