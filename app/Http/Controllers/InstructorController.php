@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\USUARIOS;
 use App\Models\Ficha;
+use App\Models\InstructorFicha;
 use App\Models\descripcionEvidencias;
 use App\Models\gestionRutas;
 use Illuminate\Support\Facades\Auth;
@@ -14,18 +15,27 @@ class InstructorController extends Controller
 {
     public function buscarFicha()
     {
-        return view('instructor.buscarFicha');
+        $usuario = Auth::user();
+        $id = $usuario->idUsuarios;
+        $idFichas = InstructorFicha::WhereIn('idInstructor', [$id])
+        ->pluck('idFicha');
+        $fichas = Ficha::WhereIn('idFichas', $idFichas)
+        ->get(['idFichas','NumeroDeFicha']);
+
+        return view('instructor.buscarFicha',[
+            'fichas'=> $fichas,
+        ]);
     }
 
-    public function verFicha(Request $request)
+    public function verFicha($idFicha)
     {
-        $numero = $request->input('ficha');
+        
         $usuario = Auth::user();
         $instructorId = $usuario->idUsuarios; 
 
+        
         $ficha = Ficha::with(['usuarios.ficha'])
-            ->where('NumeroDeFicha', $numero)
-            ->first();
+            ->findOrFail($idFicha);
 
         if (!$ficha) {
             return redirect()->route('instructor.buscarFicha')->with('mensaje', 'Ficha no encontrada');
@@ -54,7 +64,7 @@ class InstructorController extends Controller
 
         return view('instructor.instructor', [
             'aprendices' => $aprendices,
-            'fichaNumero' => $numero
+            'fichaNumero' => $ficha->NumeroDeFicha,
         ]);
     }
 
@@ -111,8 +121,11 @@ class InstructorController extends Controller
     {
         $comentarios = $request->input('comentarios', []);
         $estados = $request->input('estados', []);
-        $fichaNumero = $request->input('ficha');
+        $idUsuario=USUARIOS::findOrFail($id);
 
+        $fichas= Ficha::findOrFail($idUsuario->Fichas_idFichas);
+
+        $idFicha = $fichas->idFichas;
         foreach ($comentarios as $nombre => $comentario) {
             $estadoInput = $estados[$nombre] ?? 'pending';
 
@@ -129,7 +142,7 @@ class InstructorController extends Controller
             );
         }
 
-        return redirect()->route('instructor.ficha.buscar', ['ficha' => $fichaNumero])
+        return redirect()->route('instructor.ficha.buscar', $idFicha)
             ->with('success', 'Revisión guardada correctamente.');
     }
 

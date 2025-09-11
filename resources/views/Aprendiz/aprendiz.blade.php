@@ -16,6 +16,11 @@
             <p class="portal-subtitle">Los documentos deben ser en formato PDF y deben pesar menos de 5 MB</p>
         </div>
 
+         @if (session('msg'))
+                           <div class="alert alert-danger" role="alert">
+                               {{ session('msg') }}
+                           </div>                        
+                        @endif
         <div class="user-info">
             <div class="row">
                 <div class="col-md-4">
@@ -32,6 +37,7 @@
                 @csrf
                 <table class="table documents-table">
                     <thead>
+
                         <tr>
                             <th style="width: 40%;">Nombre documento</th>
                             <th style="width: 15%;">Cargar documentos</th>

@@ -8,6 +8,7 @@ class DescripcionEvidencias extends Model
 {
     protected $table = 'descripcionEvidencias';
     protected $primaryKey = 'idDescripcion';
+    protected $connection = 'mysql';
     public $timestamps = false;
 
     protected $fillable = [

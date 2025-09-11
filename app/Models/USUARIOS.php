@@ -4,15 +4,17 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable; 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class USUARIOS extends Authenticatable
 {
 
     use Notifiable;
+    use HasFactory;
+    
     protected $table = 'Usuarios';
     protected $primaryKey = 'idUsuarios';
-    protected $connection = 'mysql';
     public $incrementing = false;
     protected $fillable = [
         'idUsuarios',

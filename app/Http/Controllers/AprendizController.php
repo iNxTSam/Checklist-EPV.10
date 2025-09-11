@@ -62,6 +62,7 @@ class AprendizController extends Controller
 
     public function subirDocumentos(Request $request)
     {
+        
         $campos = [
             'formatoPlaneacionSeguimientoYEvaluacionEtapaProductiva',
             'comprobanteInscripcionEnElAplicativoAgenciaPublicaDelEmpleoSena',
@@ -77,9 +78,11 @@ class AprendizController extends Controller
             return redirect()->route('vista.aprendiz')->with('error', 'Debe iniciar sesión para subir documentos.');
         }
 
+        $msg = null;
         $data = [];
-
+        
         foreach ($campos as $campo) {
+            
             if ($request->hasFile($campo)) {
                 $file = $request->file($campo);
 
@@ -93,7 +96,6 @@ class AprendizController extends Controller
 
                     $data[$campo] = $path;
 
-
                     DescripcionEvidencias::updateOrCreate(
                         [
                             'idUsuario' => $usuario->idUsuarios,
@@ -105,6 +107,10 @@ class AprendizController extends Controller
                         ]
                     );
                 }
+                else{
+                    $msg = "Por favor asegurese que los archivos estan en PDF y pesan menos de 5 MB";
+                    return redirect()->route('aprendiz.inicio')->with('msg', $msg);
+                }
             }
         }
 
@@ -115,6 +121,6 @@ class AprendizController extends Controller
             );
         }
 
-        return redirect()->route('aprendiz.inicio')->with('success', 'Documentos enviados correctamente');
+        return redirect()->route('aprendiz.inicio')->with('success', 'Documentos enviados correctamente')->with('msg', $msg);
     }
 }
