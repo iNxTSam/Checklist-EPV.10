@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class GestionRutas extends Model
 {
+    use HasFactory;
     protected $table = 'GestionRutas';
     protected $primaryKey = 'idGestionRutas';
     public $timestamps = false;
@@ -21,8 +23,5 @@ class GestionRutas extends Model
         'formatoEntregaDeDocumentos',
     ];
 
-    public function estado()
-    {
-        return $this->belongsTo(EstadoDocumentacion::class, 'EstadoDocumentacion_idEstadoEtapa');
-    }
+   
 }
