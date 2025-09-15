@@ -20,6 +20,8 @@ class InstructorTest extends TestCase
 {
     use RefreshDatabase;
 
+    
+    // Pruebas de inicio de sesion
     //Acceso correcto
     public function test_login_correcto()
     {
@@ -76,6 +78,32 @@ class InstructorTest extends TestCase
         $loginMal->assertRedirect(route('vista.instructor'));
     }
 
+    public function test_logeo_con_rol_aprendiz (){
+        $password = '123';
+
+        $aprendiz = USUARIOS::factory() -> create([
+            'Nombres' => "Nombre ",
+            'Apellidos' => "inventado",
+            'Telefono' => 302312312,
+            'Correo' => "aroca329@dfse.ccs",
+            'Dirrecion' => "cll1 2#a",
+            'TipoDeDocumentos_idTipoDeDocumentos' => 1,
+            'Roles_idRoles' => 2,
+            'Fichas_idFichas' => 1,
+            'EtapaProductvia_idEtapaProductvia' => 1,
+            'Clave' => Hash::make($password),
+            'idUsuarios' => 12345678
+        ]);
+
+        $inicioMal = $this->post(route('login.instructor'), [
+            'numeroDocumento' => $aprendiz-> idUsuarios,
+            'clave' => $password
+        ]);
+
+        $inicioMal -> assertStatus(302);
+        $inicioMal -> assertRedirect(route('vista.instructor')); 
+    }
+
     //Usuario no encontrado
     public function test_usuario_no_encontrado()
     {
@@ -91,6 +119,30 @@ class InstructorTest extends TestCase
         $loginMal->assertRedirect(route('vista.instructor'));
     }
 
+    public function test_formulario_vacio()
+    {
+        $password = '1234';
+        $instructor = USUARIOS::factory() -> create([
+            'Nombres' => "Nombre ",
+            'Apellidos' => "inventado",
+            'Telefono' => 302312312,
+            'Correo' => "aroca329@dfse.ccs",
+            'Dirrecion' => "cll1 2#a",
+            'TipoDeDocumentos_idTipoDeDocumentos' => 1,
+            'Roles_idRoles' => 1,
+            'Fichas_idFichas' => 1,
+            'EtapaProductvia_idEtapaProductvia' => 1,
+            'Clave' => Hash::make($password),
+            'idUsuarios' => 12345678
+        ]);
+
+        $inicioMal = $this->post(route('login.instructor'), [
+            //campos vacios
+        ]);
+
+        $inicioMal->assertRedirect(route('vista.instructor'));
+    }
+    // Pruebas de la visualizacion de las fichas asignadas a instructor
     public function test_fichas_asignadas()
     {
 
@@ -193,6 +245,7 @@ class InstructorTest extends TestCase
         $this->assertNotContains($ficha2->idFichas, $fichaNoAsignada2);
     }
 
+    // Pruebas de la visualizacion de los aprendices de las fichas asignadas a instructor
     public function test_instructor_visualizando_ficha()
     {
         $ficha = Ficha::factory()->create([
@@ -287,7 +340,7 @@ class InstructorTest extends TestCase
         $response->assertRedirect(route('instructor.buscarFicha'));
         $response->assertSessionHas('mensaje', 'No tienes acceso a esta ficha');
     }
-    public function test_ficha_muestra_correctamente_sin_aprendices()
+    public function test_instructor_visualizando_ficha_sin_aprendices()
     {
         $ficha = Ficha::factory()->create([
             'idFichas' => 1,
@@ -332,6 +385,7 @@ class InstructorTest extends TestCase
         $this->assertCount(0, $aprendicesEnVista);
     }
 
+    // Pruebas de visualizacion de los archivos de los aprendices
     public function test_retorna_correctamente_vista_con_aprendiz_y_documentos()
     {
         $instructor = USUARIOS::factory()->create(
@@ -392,8 +446,6 @@ class InstructorTest extends TestCase
         $this->assertTrue($documents[3]['approved']);
         $this->assertFalse($documents[3]['rejected']);
     }
-
-
     public function test_retorna_correctamente_vista_con_aprendiz_sin_documentos()
     {
 
@@ -444,6 +496,8 @@ class InstructorTest extends TestCase
             $this->assertNull($doc['file_path']);
         }
     }
+
+    // Pruebas de guardar los cambios y/o revisiones a los documentos de los aprendices
 
     public function test_actualiza_decripcion_de_evidencia_correctamente()
     {
