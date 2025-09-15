@@ -17,7 +17,7 @@
         <div class="col-md-3"><strong>Documento:</strong> {{ $student['document'] }}</div>
       </div>
 
-      <form method="POST" action="{{ route('instructor.guardarRevision', $student['id']) }}">
+      <form method="POST" action="{{ route('instructor.guardarRevision', $student['id'], ) }}">
         @csrf
         <input type="hidden" name="ficha" value="{{ request('ficha') }}">
 

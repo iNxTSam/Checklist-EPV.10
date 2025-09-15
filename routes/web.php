@@ -20,7 +20,7 @@ Route::get('/sample', [Navegacion::class, 'documentos'])->name('login');
 // Vista instructor
 Route::middleware(['auth', 'role:1', 'no-cache'])->prefix('instructor')->name('instructor.')->group(function () {
     Route::get('/', [InstructorController::class, 'buscarFicha'])->name('buscarFicha');
-    Route::get('/buscarFicha/resultado', [InstructorController::class, 'verFicha'])->name('ficha.buscar');
+    Route::get('/buscarFicha/resultado/{idFicha}', [InstructorController::class, 'verFicha'])->name('ficha.buscar');
     Route::get('/instructor/revision/{id}', [InstructorController::class, 'reviewStudent'])->name('revision');
     Route::post('/instructor/revision/{id}/guardar', [InstructorController::class, 'guardarRevision'])->name('guardarRevision');
 });

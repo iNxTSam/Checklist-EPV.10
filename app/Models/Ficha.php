@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ficha extends Model
 {
+    use HasFactory;
     protected $table = 'Fichas'; 
     protected $primaryKey = 'idFichas'; 
     public $timestamps = false;
@@ -18,8 +20,9 @@ class Ficha extends Model
 
     public function aprendices()
 {
-    return $this->hasMany(USUARIOS::class, 'Fichas_idFichas')->where('Roles_idRoles', 2); // Solo aprendices
+    return $this->hasMany(USUARIOS::class, 'Fichas_idFichas')->where('Roles_idRoles', 2); 
 }
+
 
 public function instructores()
 {
